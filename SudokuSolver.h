@@ -1,3 +1,4 @@
 #pragma once
+#include "SudokuTypes.h"
 
-int SudokuSolver(int* puzzle);
+int SudokuSolver(SudokuArray & puzzle);

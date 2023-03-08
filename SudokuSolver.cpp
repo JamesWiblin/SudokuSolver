@@ -1,4 +1,5 @@
 #include <string.h>
+#include "SudokuSolver.h"
 
 #ifdef _MSC_VER
 #include <intrin.h>
@@ -6,10 +7,7 @@
 #pragma intrinsic(_BitScanForward)
 #endif
 
-//Classic 9x9 sudoku
-static constexpr int nonetwidth = 3;
-static constexpr int sudokuwidth = nonetwidth * nonetwidth;
-static constexpr int arraylength = sudokuwidth * sudokuwidth;
+
 
 inline void GetPosition(const int index, int* row, int* column, int* nonet)
 {
@@ -18,16 +16,16 @@ inline void GetPosition(const int index, int* row, int* column, int* nonet)
 	*nonet = (*row / nonetwidth) + (nonetwidth * (*column / nonetwidth));
 }
 
-int SudokuSolver(int* puzzle)
+int SudokuSolver(SudokuArray& puzzle)
 {
 	int i, j;
-	int possibleBits[arraylength]; //Contains the possible values for each square in the sudoku as a bit field from index 0-8
-	int columnBits[sudokuwidth]; //Contains the currently thought solved values for each column in the sudoku
-	int rowBits[sudokuwidth];	//As above but for rows
-	int nonetBits[sudokuwidth]; //As above but for nonets
-	int bitCurrentlyLegal[arraylength]; //The possible bit we currently believe to be legal
-	int firstPossibleBit[arraylength]; //Contains the first possible bit for quick initialisation when backtracking
-	int rollingMask[sudokuwidth]; //Used to mask off lower bits when jumping through possibleBits
+	SudokuArray possibleBits{}; //Contains the possible values for each square in the sudoku as a bit field from index 0-8
+	SudokuWidthArray columnBits{}; //Contains the currently thought solved values for each column in the sudoku
+	SudokuWidthArray rowBits{};	//As above but for rows
+	SudokuWidthArray nonetBits{}; //As above but for nonets
+	SudokuArray bitCurrentlyLegal{}; //The possible bit we currently believe to be legal
+	SudokuArray firstPossibleBit{}; //Contains the first possible bit for quick initialisation when backtracking
+	SudokuWidthArray rollingMask{}; //Used to mask off lower bits when jumping through possibleBits
 	int unsolvedSquares = 0;
 	int squaresSolved = 0;
 	int bitMask = 0;
@@ -41,11 +39,6 @@ int SudokuSolver(int* puzzle)
 	int nextBitIndex, currentBitIndex, bitToTest;
 	bool hiddenSingleFound;
 	bool backTracking;
-
-	memset(possibleBits, 0x0, arraylength * sizeof(int));
-	memset(columnBits,   0x0, sudokuwidth * sizeof(int));
-	memset(rowBits,      0x0, sudokuwidth * sizeof(int));
-	memset(nonetBits,    0x0, sudokuwidth * sizeof(int));
 
 	for (j = 0; j < sudokuwidth; j++)
 	{
