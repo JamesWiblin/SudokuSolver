@@ -8,3 +8,7 @@ Both stages store the possible values for each square, row, column and nonet in 
 For a good explanation on the naked and hidden singles techniques see:
 http://www.sudocue.net/guide.php#NakedSingle
 http://www.sudocue.net/guide.php#HiddenSingle
+
+## TODO:
+* Make code compiler agnostic. Currently only supports MSVC.
+* Implement more advanced deductive methods.
